@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mega Food City & Mega Pizza B.B.A — Menu</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --red:#c8202e;
+    --red-dark:#8f1620;
+    --black:#151312;
+    --yellow:#f7a81c;
+    --yellow-light:#ffc94a;
+    --cream:#f2ede2;
+    --wood-a:#e9e3d5;
+    --wood-b:#ded6c4;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Arial Narrow', Arial, sans-serif;
+    background:var(--black);
+    color:var(--black);
+  }
+  .wood{
+    background-image:
+      repeating-linear-gradient(90deg, var(--wood-a) 0px, var(--wood-a) 38px, var(--wood-b) 38px, var(--wood-b) 40px);
+  }
+  header.top{
+    background:var(--red);
+    color:#fff;
+    text-align:center;
+    padding:22px 14px 18px;
+    position:relative;
+    border-bottom:6px solid var(--black);
+  }
+  header.top h1{
+    margin:0;
+    font-family:'Arial Black', Arial, sans-serif;
+    font-weight:900;
+    font-size:2.1rem;
+    letter-spacing:1px;
+    text-shadow:2px 2px 0 var(--black);
+  }
+  header.top h1 span{color:var(--yellow-light);}
+  header.top .sub{
+    margin-top:4px;
+    font-size:.85rem;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--yellow-light);
+    font-weight:bold;
+  }
+  .delivery-tag{
+    position:absolute;
+    top:14px;
+    right:14px;
+    background:var(--yellow);
+    color:var(--black);
+    font-weight:900;
+    font-size:.7rem;
+    padding:6px 10px;
+    border-radius:8px;
+    line-height:1.1;
+    text-align:center;
+    border:2px solid var(--black);
+  }
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    background:var(--black);
+    position:sticky;
+    top:0;
+    z-index:50;
+    border-bottom:3px solid var(--yellow);
+  }
+  nav.tabs button{
+    flex:0 0 auto;
+    background:transparent;
+    color:#fff;
+    border:none;
+    padding:12px 16px;
+    font-weight:900;
+    font-size:.8rem;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    cursor:pointer;
+    border-right:1px solid #2a2624;
+    white-space:nowrap;
+  }
+  nav.tabs button.active{
+    background:var(--yellow);
+    color:var(--black);
+  }
+
+  main{padding:14px 12px 40px;}
+
+  section.category{display:none; padding-top:6px;}
+  section.category.active{display:block;}
+
+  .cat-title{
+    background:var(--red);
+    color:#fff;
+    font-family:'Arial Black', Arial, sans-serif;
+    font-weight:900;
+    font-size:1.15rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    padding:10px 14px;
+    border-radius:6px;
+    margin:18px 0 10px;
+    box-shadow:2px 2px 0 var(--black);
+  }
+  .cat-title:first-child{margin-top:4px;}
+
+  .item{
+    background:#fff;
+    border:1px solid #e2ddcf;
+    border-left:5px solid var(--yellow);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .item .info h3{
+    margin:0 0 3px;
+    font-size:.98rem;
+    font-weight:800;
+    color:var(--black);
+    text-transform:uppercase;
+  }
+  .item .info p{
+    margin:0;
+    font-size:.78rem;
+    color:#5c564c;
+    line-height:1.3;
+  }
+  .item .prices{
+    flex:0 0 auto;
+    text-align:right;
+    white-space:nowrap;
+  }
+  .price-badge{
+    display:inline-block;
+    background:var(--yellow);
+    color:var(--black);
+    font-weight:900;
+    font-size:.78rem;
+    padding:4px 8px;
+    border-radius:6px;
+    margin:2px 0 2px 4px;
+    border:1px solid var(--black);
+  }
+  .price-single{
+    background:var(--red);
+    color:#fff;
+    font-weight:900;
+    font-size:.9rem;
+    padding:6px 10px;
+    border-radius:6px;
+  }
+
+  .note-box{
+    background:var(--yellow-light);
+    border:2px dashed var(--black);
+    border-radius:8px;
+    padding:8px 12px;
+    font-size:.8rem;
+    font-weight:700;
+    margin:10px 0;
+    text-align:center;
+  }
+
+  .supp-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .supp-card{
+    background:#fff;
+    border:1px solid #e2ddcf;
+    border-radius:8px;
+    padding:8px 10px;
+  }
+  .supp-card h4{
+    margin:0 0 4px;
+    font-size:.82rem;
+    text-transform:uppercase;
+    font-weight:900;
+    color:var(--red-dark);
+  }
+  .supp-card .price-badge{margin-left:0; margin-right:4px;}
+
+  footer.contact{
+    background:var(--black);
+    color:#fff;
+    padding:26px 16px 34px;
+    text-align:center;
+  }
+  footer.contact h2{
+    color:var(--yellow);
+    font-family:'Arial Black', Arial, sans-serif;
+    font-size:1.2rem;
+    margin-bottom:10px;
+    text-transform:uppercase;
+  }
+  footer.contact .phones{
+    font-weight:800;
+    line-height:1.9;
+    font-size:1rem;
+  }
+  footer.contact .logos{
+    margin-top:14px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  footer.contact .badge{
+    background:var(--red);
+    color:#fff;
+    padding:6px 14px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:.8rem;
+    border:2px solid var(--yellow);
+  }
+
+  /* QR generator panel */
+  .qr-panel{
+    background:var(--cream);
+    border-top:6px solid var(--red);
+    padding:24px 16px 36px;
+    text-align:center;
+  }
+  .qr-panel h2{
+    font-family:'Arial Black', Arial, sans-serif;
+    color:var(--red-dark);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .qr-panel p{font-size:.85rem; color:#444; max-width:420px; margin:0 auto 14px;}
+  .qr-panel input{
+    width:90%;
+    max-width:420px;
+    padding:10px 12px;
+    border-radius:8px;
+    border:2px solid var(--red);
+    font-size:.9rem;
+    margin-bottom:10px;
+  }
+  .qr-panel button{
+    background:var(--red);
+    color:#fff;
+    border:none;
+    padding:10px 22px;
+    border-radius:8px;
+    font-weight:900;
+    text-transform:uppercase;
+    cursor:pointer;
+    letter-spacing:.5px;
+  }
+  .qr-panel button:hover{background:var(--red-dark);}
+  #qrcode{
+    display:inline-block;
+    margin-top:16px;
+    padding:14px;
+    background:#fff;
+    border-radius:12px;
+    border:3px solid var(--black);
+  }
+  #qrcode img, #qrcode canvas{display:block;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="delivery-tag">🛵 LIVRAISON<br>À DOMICILE</div>
+  <h1>MEGA <span>FOOD</span> CITY</h1>
+  <div class="sub">Pizza · Tacos · Soufflé · Box Menus</div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="active" data-target="pizza-sauce">Pizza Sauce</button>
+  <button data-target="pizza-creme">Pizza Crème</button>
+  <button data-target="supp">Suppléments</button>
+  <button data-target="souffle">Soufflé</button>
+  <button data-target="tacos">Tacos</button>
+  <button data-target="boxes">Box Menus</button>
+  <button data-target="sides">Snacks</button>
+</nav>
+
+<main class="wood">
+
+  <!-- PIZZA - BASE SAUCE -->
+  <section class="category active" id="pizza-sauce">
+    <div class="cat-title">Base Sauce Pizza</div>
+
+    <div class="item"><div class="info"><h3>Margarita</h3><p>Sauce pizza, fromage, olives</p></div>
+      <div class="prices"><span class="price-badge">L 350</span><span class="price-badge">XXL 11000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Campione (Viande Hachée)</h3><p>Sauce pizza, viande hachée, olives</p></div>
+      <div class="prices"><span class="price-badge">L 550</span><span class="price-badge">XXL 14500</span></div></div>
+
+    <div class="item"><div class="info"><h3>Poulet</h3><p>Sauce pizza, fromage, poulet, olives</p></div>
+      <div class="prices"><span class="price-badge">L 550</span><span class="price-badge">XXL 14500</span></div></div>
+
+    <div class="item"><div class="info"><h3>Orientale (Saucisses)</h3><p>Sauce pizza, merguez, fromage, poivrons, olives</p></div>
+      <div class="prices"><span class="price-badge">L 550</span><span class="price-badge">XXL 14500</span></div></div>
+
+    <div class="item"><div class="info"><h3>Végétarienne</h3><p>Sauce pizza, fromage, poivrons, champignons, tomates, oignon, olives</p></div>
+      <div class="prices"><span class="price-badge">L 550</span><span class="price-badge">XXL 13500</span></div></div>
+
+    <div class="item"><div class="info"><h3>Thon</h3><p>Sauce pizza, fromage, thon, olives</p></div>
+      <div class="prices"><span class="price-badge">L 650</span><span class="price-badge">XXL 16000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Poulet Maison</h3><p>Sauce pizza, fromage, poulet, oignon, piment fort, olives</p></div>
+      <div class="prices"><span class="price-badge">L 600</span><span class="price-badge">XXL 15500</span></div></div>
+
+    <div class="item"><div class="info"><h3>Champignons</h3><p>Sauce pizza, fromage, champignons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 700</span><span class="price-badge">XXL 19000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Crevettes</h3><p>Sauce pizza, fromage, crevettes, olives</p></div>
+      <div class="prices"><span class="price-badge">L 900</span><span class="price-badge">XXL 23000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Dinde Fumée</h3><p>Sauce pizza, fromage, dinde fumée, olives</p></div>
+      <div class="prices"><span class="price-badge">L 700</span><span class="price-badge">XXL 18000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Fruits de Mer</h3><p>Sauce pizza, fromage, fruits de mer, olives</p></div>
+      <div class="prices"><span class="price-badge">L 900</span><span class="price-badge">XXL 23000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Saumon</h3><p>Sauce pizza, saumon fumé, olives</p></div>
+      <div class="prices"><span class="price-badge">L 1200</span><span class="price-badge">XXL 30000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Trois 03 Fromages</h3><p>Sauce pizza, gruyère râpé, fromage fondu, camembert, olives</p></div>
+      <div class="prices"><span class="price-badge">L 600</span><span class="price-badge">XXL 15000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Aux Anchois</h3><p>Sauce pizza, fromage, anchois, olives</p></div>
+      <div class="prices"><span class="price-badge">L 850</span><span class="price-badge">XXL 21000</span></div></div>
+
+    <div class="item"><div class="info"><h3>Quatre 04 Fromages</h3><p>Sauce pizza, fromage râpé, fromage fondu, camembert, gruyère fumé</p></div>
+      <div class="prices"><span class="price-badge">L 700</span><span class="price-badge">XXL 18000</span></div></div>
+  </section>
+
+  <!-- PIZZA - BASE CREME FRAICHE -->
+  <section class="category" id="pizza-creme">
+    <div class="cat-title">Base Crème Fraîche</div>
+
+    <div class="item"><div class="info"><h3>La Boisée Poulet</h3><p>Crème fraîche, fromage, poulet, poivrons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 600</span><span class="price-badge">XXL 18000</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Dinde Fumée</h3><p>Crème fraîche, fromage, dinde fumée, poivrons</p></div>
+      <div class="prices"><span class="price-badge">L 750</span><span class="price-badge">XXL 20000</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Merguez</h3><p>Crème fraîche, fromage, merguez, poivrons</p></div>
+      <div class="prices"><span class="price-badge">L 600</span><span class="price-badge">XXL 15500</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Viande Hachée</h3><p>Crème fraîche, fromage, viande hachée, poivrons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 600</span><span class="price-badge">XXL 15500</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée 4 Fromages</h3><p>Crème fraîche, fromage, camembert, poivrons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 700</span><span class="price-badge">XXL 16000</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Champignons</h3><p>Crème fraîche, fromage, champignons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 750</span><span class="price-badge">XXL 19500</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Maison</h3><p>Crème fraîche, fromage, poulet, oignon, piment fort, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 620</span><span class="price-badge">XXL 16500</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Crevette</h3><p>Crème fraîche, fromage, crevette, poivrons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 950</span><span class="price-badge">XXL 25000</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Saumon Fumé</h3><p>Crème fraîche, fromage, saumon fumé, poivrons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 1300</span><span class="price-badge">XXL 32000</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée Fruits de Mer</h3><p>Crème fraîche, fromage, fruits de mer, poivrons, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 1100</span><span class="price-badge">XXL 26000</span></div></div>
+
+    <div class="item"><div class="info"><h3>La Boisée 05 Fromages</h3><p>Crème fraîche, fromage, poivrons, gruyère fumé, camembert, sauce gruyère</p></div>
+      <div class="prices"><span class="price-badge">L 750</span><span class="price-badge">XXL 18000</span></div></div>
+
+    <div class="note-box">Pizza XL, XXL, XXXL : quatre saveurs au choix, prix selon l'ingrédient</div>
+
+    <div class="item"><div class="info"><h3>¼ Pizza Royale</h3><p>Crevette, boisé fumée, saumon, 3 fromages</p></div>
+      <div class="prices"><span class="price-badge">L 1000</span><span class="price-badge">XXL 24000</span></div></div>
+
+    <div class="item"><div class="info"><h3>¼ Pizza 4 Saisons</h3><p>Thon, végétarienne, boisé poulet, viande hachée</p></div>
+      <div class="prices"><span class="price-badge">L 850</span><span class="price-badge">XXL 18000</span></div></div>
+
+    <div class="item"><div class="info"><h3>¼ Pizza Chef</h3><p>Tous les ingrédients</p></div>
+      <div class="prices"><span class="price-badge">L 1000</span><span class="price-badge">XXL 20000</span></div></div>
+
+    <div class="item"><div class="info"><h3>⅛ Pizza 8 Saveurs</h3><p>Poulet, boisé fruits de mer, boisé 4 fromages, boisé d'anchois, thon, saumon, viande hachée, anchois</p></div>
+      <div class="prices"><span class="price-badge">XXL 30000</span><span class="price-badge">XXXL 39000</span></div></div>
+  </section>
+
+  <!-- SUPPLEMENTS -->
+  <section class="category" id="supp">
+    <div class="cat-title">Suppléments</div>
+    <div class="supp-grid">
+      <div class="supp-card"><h4>Saumon</h4><span class="price-badge">L 400</span><span class="price-badge">XL 700</span><span class="price-badge">XXXL 12000</span></div>
+      <div class="supp-card"><h4>Fromage Fondu</h4><span class="price-badge">L 300</span><span class="price-badge">XL 350</span></div>
+      <div class="supp-card"><h4>Fruits de Mer</h4><span class="price-badge">L 600</span><span class="price-badge">XL 750</span></div>
+      <div class="supp-card"><h4>Sauce Gruyère</h4><span class="price-badge">L 100</span><span class="price-badge">XL 200</span></div>
+      <div class="supp-card"><h4>Oignon</h4><span class="price-badge">L 500</span><span class="price-badge">XL 50</span></div>
+      <div class="supp-card"><h4>Cheddar</h4><span class="price-badge">L 200</span><span class="price-badge">XL 350</span></div>
+      <div class="supp-card"><h4>Dinde Fumée</h4><span class="price-badge">L 250</span><span class="price-badge">XL 450</span></div>
+      <div class="supp-card"><h4>Champignons</h4><span class="price-badge">L 200</span><span class="price-badge">XL 350</span></div>
+      <div class="supp-card"><h4>Viande Hachée</h4><span class="price-badge">L 150</span><span class="price-badge">XL 300</span></div>
+      <div class="supp-card"><h4>Bordure</h4><span class="price-badge">L 1500</span><span class="price-badge">XL 300</span></div>
+      <div class="supp-card"><h4>Crevette</h4><span class="price-badge">L 300</span><span class="price-badge">XL 450</span></div>
+      <div class="supp-card"><h4>Thon</h4><span class="price-badge">L 200</span><span class="price-badge">XL 350</span></div>
+      <div class="supp-card"><h4>Poulet</h4><span class="price-badge">L 150</span><span class="price-badge">XL 300</span></div>
+      <div class="supp-card"><h4>Merguez</h4><span class="price-badge">L 150</span><span class="price-badge">XL 300</span></div>
+      <div class="supp-card"><h4>Camembert</h4><span class="price-badge">L 150</span><span class="price-badge">XL 300</span></div>
+    </div>
+  </section>
+
+  <!-- SOUFFLE -->
+  <section class="category" id="souffle">
+    <div class="cat-title">Soufflé — Base Sauce Pizza</div>
+
+    <div class="item"><div class="info"><h3>Soufflé Poulet</h3><p>Sauce pizza, poulet, fromage fondu, fromage râpé</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Viande Hachée</h3><p>Sauce pizza, fromage fondu, fromage râpé, viande hachée</p></div><div class="prices"><span class="price-single">600 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Thon</h3><p>Sauce pizza, fromage fondu, fromage râpé, thon</p></div><div class="prices"><span class="price-single">650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Merguez</h3><p>Sauce pizza, fromage fondu, fromage râpé, merguez</p></div><div class="prices"><span class="price-single">600 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Thon Champignons</h3><p>Sauce pizza, fromage fondu, fromage râpé, thon, champignons</p></div><div class="prices"><span class="price-single">750 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Foie</h3><p>Sauce pizza, fromage fondu, fromage râpé, foie</p></div><div class="prices"><span class="price-single">700 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Dinde Fumée</h3><p>Sauce pizza, fromage fondu, fromage râpé, dinde fumée</p></div><div class="prices"><span class="price-single">900 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Mega</h3><p>Mélange tous les ingrédients avec un bord de fromage</p></div><div class="prices"><span class="price-single">1600 DA</span></div></div>
+
+    <div class="cat-title">Soufflé — Base Crème Fraîche</div>
+
+    <div class="item"><div class="info"><h3>Soufflé Spécial Poulet</h3><p>Crème fraîche, fromage râpé, poulet, sauce gruyère</p></div><div class="prices"><span class="price-single">600 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Spécial Vinade Hachée</h3><p>Crème fraîche, fromage râpé, viande hachée, sauce gruyère</p></div><div class="prices"><span class="price-single">650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Spécial Merguez</h3><p>Crème fraîche, fromage râpé, merguez, sauce gruyère</p></div><div class="prices"><span class="price-single">650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé 03 Fromage Panaché</h3><p>Crème fraîche, fromage fondu, fromage râpé, viande hachée, poulet, camembert, sauce gruyère</p></div><div class="prices"><span class="price-single">650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Spécial Foie</h3><p>Crème fraîche, fromage fondu, fromage râpé, foie, sauce gruyère</p></div><div class="prices"><span class="price-single">700 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé 04 Fromage Panaché</h3><p>Crème fraîche, fromage fondu, fromage râpé, poulet, camembert, sauce gruyère, gruyère fumé</p></div><div class="prices"><span class="price-single">800 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Spécial Dinde Fumée</h3><p>Crème fraîche, fromage fondu, fromage râpé, dinde fumée, sauce gruyère</p></div><div class="prices"><span class="price-single">950 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Foie 03 Fromages</h3><p>Crème fraîche, foie, fromage fondu, gruyère fumé, camembert, fromage râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">850 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Foie 04 Fromages</h3><p>Crème fraîche, crevette, fruits de mer, fromage fondu, fromage râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">1000 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Soufflé Royal</h3><p>Crème fraîche, crevette, fruits de mer, fromage fondu, camembert, oignon, piment doux et fort, sauce gruyère</p></div><div class="prices"><span class="price-single">1000 DA</span></div></div>
+
+    <div class="note-box">Soufflé Gratiné ( +200 DA )</div>
+  </section>
+
+  <!-- TACOS -->
+  <section class="category" id="tacos">
+    <div class="cat-title">Tacos</div>
+
+    <div class="item"><div class="info"><h3>Tacos Poulet</h3><p>Poulet haché, frites, fromage râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">450 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Viande Hachée</h3><p>Viande hachée, frites, fromages râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Panaché</h3><p>Poulet, viande hachée, frites, fromages râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Foie</h3><p>Foie, frites, fromages râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Viande Hachée 3 Fromages</h3><p>Viande hachée, frites, fromages râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Poulet 3 Fromages</h3><p>Poulet, frites, fromages râpé, sauce gruyère</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Foie 3 Fromages</h3><p>Foie, frites, fromages râpé, camembert, sauce gruyère</p></div><div class="prices"><span class="price-single">650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos 3 Fromages Panaché</h3><p>Poulet, viande hachée, frites, fromages râpé, camembert, sauce gruyère</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Spécial Poulet</h3><p>Poulet, frites, œufs, double fromages, sauce gruyère, légumes</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Spécial Viande</h3><p>Viande hachée, frites, œufs, double fromages, sauce gruyère, 4 légumes</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Spécial Panaché</h3><p>Poulet, viande hachée, œufs, double fromages, sauce gruyère, légumes</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Spécial Merguez</h3><p>Merguez, frites, double fromages, sauce gruyère</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Dinde Fumée</h3><p>Dinde fumée, frites, double fromages, sauce gruyère</p></div><div class="prices"><span class="price-single">600 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Royal</h3><p>Crevette, fruits de mer, poulet, frites, sauce gruyère</p></div><div class="prices"><span class="price-single">800 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Tacos Maxi (XL)</h3><p>Viande hachée, merguez, poulet, frites, fromage râpé</p></div><div class="prices"><span class="price-single">950 DA</span></div></div>
+
+    <div class="note-box">Tacos Gratiné ( +100 DA )</div>
+  </section>
+
+  <!-- BOX MENUS -->
+  <section class="category" id="boxes">
+    <div class="cat-title">Box Menus</div>
+
+    <div class="item"><div class="info"><h3>Box Wings</h3><p>6 wings crispy + frites + salade + 3 sauces</p></div><div class="prices"><span class="price-single">900 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Box Nuggets</h3><p>4 nuggets crispy + frites + salade + 3 sauces</p></div><div class="prices"><span class="price-single">950 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Box Tenders</h3><p>Tenders crispy + frites + salade + 3 sauces</p></div><div class="prices"><span class="price-single">950 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Box Cuisse</h3><p>4 morceaux cuisse + frites + salade + 3 sauces</p></div><div class="prices"><span class="price-single">1000 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Box Chicken 2 Perso.</h3><p>10 pièces crispy + frites + salade + 4 sauces</p></div><div class="prices"><span class="price-single">1650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Family Box</h3><p>20 pièces crispy + frites + salade + 4 sauces</p></div><div class="prices"><span class="price-single">2800 DA</span></div></div>
+  </section>
+
+  <!-- SNACKS / MEGA FOOD CITY -->
+  <section class="category" id="sides">
+    <div class="cat-title">Snacks & Salades — Mega Food City</div>
+
+    <div class="item"><div class="info"><h3>Chicken Fries</h3></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Beefy Fries</h3></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Chicken Rice</h3></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Crunchy Chicken</h3><p>Servi avec frites ou riz</p></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Dinde Fumé</h3></div><div class="prices"><span class="price-single">550 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Salade Cesar</h3></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Barquette de Frites</h3></div><div class="prices"><span class="price-single">150 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Menu Enfants</h3><p>+ surprise</p></div><div class="prices"><span class="price-single">650 DA</span></div></div>
+    <div class="item"><div class="info"><h3>Bâtonnets de Fromage</h3></div><div class="prices"><span class="price-single">500 DA</span></div></div>
+  </section>
+
+</main>
+
+<footer class="contact">
+  <h2>Commander</h2>
+  <div class="phones">
+    0550.80.78.78<br>
+    0550.80.80.71<br>
+    0550.80.80.73<br>
+    0770.77.75.73<br>
+    0652.68.58.58
+  </div>
+  <div class="logos">
+    <span class="badge">Mega Pizza B.B.A</span>
+    <span class="badge">Mega Food City</span>
+  </div>
+</footer>
+
+<div class="qr-panel">
+  <h2>QR Code du menu</h2>
+  <p>Une fois cette page mise en ligne (hébergement gratuit possible via GitHub Pages, Netlify, etc.), collez le lien ici pour générer le QR code à imprimer sur vos tables.</p>
+  <input type="text" id="urlInput" placeholder="https://votre-lien-vers-le-menu.com" />
+  <br>
+  <button onclick="generateQR()">Générer le QR Code</button>
+  <div id="qrcode"></div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('nav.tabs button');
+  const sections = document.querySelectorAll('section.category');
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      sections.forEach(s=>s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  let qr = null;
+  function generateQR(){
+    const url = document.getElementById('urlInput').value.trim();
+    const container = document.getElementById('qrcode');
+    container.innerHTML = '';
+    if(!url){
+      container.innerHTML = '<p style="color:#c8202e;font-weight:bold;">Entrez un lien d\'abord.</p>';
+      return;
+    }
+    new QRCode(container, {
+      text: url,
+      width: 220,
+      height: 220,
+      colorDark: "#151312",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+</script>
+
+</body>
+</html>
